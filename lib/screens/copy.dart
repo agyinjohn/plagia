@@ -8,19 +8,19 @@ class CopyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return buildLightThemeBackground(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.dark_mode_outlined),
-            ),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   actions: [
+      //     Padding(
+      //       padding: const EdgeInsets.only(right: 12.0),
+      //       child: IconButton(
+      //         onPressed: () {},
+      //         icon: const Icon(Icons.dark_mode_outlined),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       mainWidget: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +110,7 @@ class CopyScreen extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      context: context,
+      // context: context,
     );
   }
 
