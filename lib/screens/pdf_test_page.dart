@@ -95,7 +95,15 @@ class _PickUploadReadPdfState extends State<PickUploadReadPdf> {
             pdfContent != null
                 ? Expanded(
                     child: SingleChildScrollView(
-                      child: Text(pdfContent!),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: Text(
+                          pdfContent!,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(fontSize: 18),
+                        )),
+                      ),
                     ),
                   )
                 : Container(),

@@ -41,9 +41,9 @@ class MyApp extends ConsumerWidget {
             } else if (snapshot.hasData && snapshot.data == true) {
               return const WelcomeScreen();
             } else if (!snapshot.hasData && snapshot.data == false) {
-              return const SplashScreen();
+              return const WelcomeScreen();
             } else {
-              return const SplashScreen();
+              return const WelcomeScreen();
             }
           }),
       onGenerateRoute: (settings) => onGenerateRoute(settings),
