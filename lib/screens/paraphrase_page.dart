@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 class ParaphrasePage extends StatefulWidget {
   const ParaphrasePage({super.key});
@@ -15,37 +15,47 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
   bool _isLoading = false;
 
   Future<void> makePostRequest(String text) async {
-    final url =
-        Uri.parse('https://paraphrase-genius.p.rapidapi.com/dev/paraphrase/');
-    final headers = {
-      'X-Rapidapi-Key': 'e782c3adc1msh044c312802562a8p1a5e11jsn85faffc9ff0d',
-      'X-Rapidapi-Host': 'paraphrase-genius.p.rapidapi.com',
-      'Content-Type': 'application/json',
-    };
-    final body = jsonEncode({'text': text, 'result_type': 'single'});
+    // final url =
+    //     Uri.parse('https://ai-based-text-paraphrasing.p.rapidapi.com/data');
+    // final headers = {
+    //   'X-Rapidapi-Key': 'e782c3adc1msh044c312802562a8p1a5e11jsn85faffc9ff0d',
+    //   'X-Rapidapi-Host': 'ai-based-text-paraphrasing.p.rapidapi.com',
+    //   "Content-Type": "multipart/form-data",
+    // };
+    // final body = jsonEncode({'text': text});
+    var url =
+        Uri.parse('https://ai-based-text-paraphrasing.p.rapidapi.com/data');
 
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', url);
+
+    // Add headers
+    request.headers.addAll({
+      'X-Rapidapi-Key': 'd06041d5d0mshefe7116620f6b1fp173e62jsnba3d614d7357',
+      'X-Rapidapi-Host': 'ai-based-text-paraphrasing.p.rapidapi.com',
+      'Content-Type':
+          'multipart/form-data; boundary=---011000010111000001101001',
+    });
+
+    // Add the text field to the request
+    request.fields['text'] = text;
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
-
+      // final response = await http.post(url, headers: headers, body: body);
+      // debugPrint(await json.decode(response.body));
+      var response = await request.send();
+      var responseString = await response.stream.bytesToString();
+      // print('Status code: ${response.statusCode}');
+      // print('Response body: $responseString');
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
         setState(() {
-          _outputController.text = responseData[
-              'paraphrased_text']; // Adjust based on actual response structure
-        });
-      } else {
-        setState(() {
-          _outputController.text =
-              'Request failed with status: ${response.statusCode}';
-          setState(() {
-            _isLoading = false;
-          });
+          _outputController.text = responseString;
         });
       }
+
       setState(() {
         _isLoading = false;
       });

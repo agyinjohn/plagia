@@ -1,22 +1,29 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:plagia_oc/screens/read_pdf.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PickUploadReadPdf extends StatefulWidget {
   const PickUploadReadPdf({super.key});
 
   @override
-  _PickUploadReadPdfState createState() => _PickUploadReadPdfState();
+  PickUploadReadPdfState createState() => PickUploadReadPdfState();
 }
 
-class _PickUploadReadPdfState extends State<PickUploadReadPdf> {
+class PickUploadReadPdfState extends State<PickUploadReadPdf> {
   String? filePath;
   String? pdfContent;
+  bool isLoading = false;
 
   Future<void> pickPdf() async {
+    setState(() {
+      isLoading = true;
+    });
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
@@ -33,9 +40,19 @@ class _PickUploadReadPdfState extends State<PickUploadReadPdf> {
         pdfContent = await readPdf(filePath!);
         setState(() {});
       }
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ReadPdf(
+                    fileName: filePath!.split("/").last,
+                    content: pdfContent!,
+                  )));
     } else {
       // User canceled the picker
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<String?> uploadPdfToFirebase(String filePath) async {
@@ -52,7 +69,7 @@ class _PickUploadReadPdfState extends State<PickUploadReadPdf> {
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
       return downloadURL;
     } catch (e) {
-      print("Error uploading PDF: $e");
+      // print("Error uploading PDF: $e");
       return null;
     }
   }
@@ -79,36 +96,18 @@ class _PickUploadReadPdfState extends State<PickUploadReadPdf> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick, Upload, and Read PDF'),
+        title: filePath != null ? Text(filePath!.split("/").last) : Container(),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          if (isLoading) const CircularProgressIndicator(),
+          if (!isLoading) ...[
             ElevatedButton(
               onPressed: pickPdf,
               child: const Text('Pick PDF'),
-            ),
-            const SizedBox(height: 20),
-            filePath != null ? Text('Picked file: $filePath') : Container(),
-            const SizedBox(height: 20),
-            pdfContent != null
-                ? Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text(
-                          pdfContent!,
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(fontSize: 18),
-                        )),
-                      ),
-                    ),
-                  )
-                : Container(),
+            )
           ],
-        ),
+        ]),
       ),
     );
   }

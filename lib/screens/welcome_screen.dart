@@ -2,8 +2,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:plagia_oc/screens/ocr.dart';
 import 'package:plagia_oc/screens/paraphrase_page.dart';
 import 'package:plagia_oc/screens/pdf_test_page.dart';
+import 'package:plagia_oc/screens/voice_to_text.dart';
 import 'package:plagia_oc/utils/user_provider.dart';
 
 import 'package:plagia_oc/utils/usermodel.dart';
@@ -174,8 +176,14 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                                     'assets/images/add_file.png',
                                     'Upload\nDocument'),
                               ),
-                              buildIconOption(
-                                  'assets/images/ocr.png', 'OCR\n '),
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Ocr())),
+                                child: buildIconOption(
+                                    'assets/images/ocr.png', 'OCR\n '),
+                              ),
                               GestureDetector(
                                 onTap: () => Navigator.push(
                                     context,
@@ -186,8 +194,16 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                                     'assets/images/edit_text_file.png',
                                     'Paraphrase\n'),
                               ),
-                              buildIconOption('assets/images/speech_bubble.png',
-                                  'Voice to \nText'),
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const VoiceToText())),
+                                child: buildIconOption(
+                                    'assets/images/speech_bubble.png',
+                                    'Voice to \nText'),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 12),

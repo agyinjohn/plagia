@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
-import '../widgets/build_container.dart';
+
 import '../widgets/build_light_theme_background.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/snacbar.dart';
